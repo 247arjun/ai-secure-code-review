@@ -131,7 +131,7 @@ In conclusion, this paper represents a significant step forward in the applicati
 # Appendix
 ## In-depth analysis
 To demonstrate the overall effectiveness of this approach, I scanned [`AttributeRouting`](https://github.com/mccalltd/AttributeRouting/), one of the most popular (Starred) open-source projects on GitHub written in C#, for regular expression usage and associated risk. My familiarity with C#, URL safety and regex risk seemed like a good combination to leverage, to manually validate the accuracy and usefulness of results returned by the system.
-### File Scanned: [`StringExtensions.cs`](https://github.com/247arjun) TODO: ==Get link to file in repo==
+### File Scanned: [`StringExtensions.cs`](https://github.com/247arjun/ai-secure-code-review/blob/main/case-study/StringExtensions.cs)
 ```csharp
 using System;
 using System.Collections.Generic;
@@ -260,7 +260,7 @@ public static bool IsValidUrl(this string s, bool allowTokens = false)
 ### Semgrep SAST to find regex usage
 Semgrep's open-source rule registry does include a [rule that flags regex object instantiations and some common operations](https://github.com/semgrep/semgrep-rules/blob/develop/csharp/lang/security/regular-expression-dos/regular-expression-dos.yaml). While being incomplete (missing operations like `Replace` etc.), it still provided a good starting point to create my custom rule that I have described below.
 #### Semgrep rule syntax
-To return the entire `class` body which contains some regex instantiations, a [Semgrep rule that flagged instantiations both inside and outside method bodies](https://www.github.com/247arjun) ==TODO: Get link to YML file== was used to scan the repo. 
+To return the entire `class` body which contains some regex instantiations, a [Semgrep rule that flagged instantiations both inside and outside method bodies](https://github.com/247arjun/ai-secure-code-review/blob/main/case-study/semgrep-rule-definition.yml)
 ```yaml
 rules:
   - id: regex-initialization
@@ -291,7 +291,7 @@ rules:
     severity: INFO
 ```
 #### SARIF result
-The full text of the [SARIF output file](https://www.github.com/247arjun) TODO: ==Get link to SARIF file== is below. 
+The full text of the [SARIF output file](https://github.com/247arjun/ai-secure-code-review/blob/main/case-study/semgrep-scan-output.sarif) 
 ```json
 {
   "$schema": "https://docs.oasis-open.org/sarif/sarif/v2.1.0/os/schemas/sarif-schema-2.1.0.json",
@@ -369,7 +369,7 @@ The full text of the [SARIF output file](https://www.github.com/247arjun) TODO: 
 }
 ```
 ### Python script to Orchestrate and Parse IO
-A [custom Python script, named `SarifResultAnalyzer`](https://github.com/247arjun) TODO: ==Get link to Python script==, leverages OpenAI's GPT-4 model to provide insightful analysis of each code snippet extracted from the SARIF file. The core functionality of this script is encapsulated within a class that performs two primary tasks: **extracting code snippets from the SARIF file** and **analyzing them using Generative AI**.
+A [custom Python script, named `SarifResultAnalyzer`](https://github.com/247arjun/ai-secure-code-review/blob/main/case-study/SarifResultAnalyzer.py), leverages OpenAI's GPT-4 model to provide insightful analysis of each code snippet extracted from the SARIF file. The core functionality of this script is encapsulated within a class that performs two primary tasks: **extracting code snippets from the SARIF file** and **analyzing them using Generative AI**.
 
 Upon initialization, the `SarifResultAnalyzer` class requires two parameters: the path to the SARIF file containing the static analysis results and an OpenAI API key for accessing GPT-4's capabilities. The script then proceeds to read the SARIF file, extracting code snippets from the specified locations within the file. Each extracted snippet is analyzed by GPT-4, which generates insights or recommendations based on the content of the snippet.
 
