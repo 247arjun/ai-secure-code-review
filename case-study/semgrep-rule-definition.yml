@@ -1,0 +1,27 @@
+rules:
+  - id: regex-initialization
+    patterns:
+      - pattern-either:
+        - pattern: |
+            class $CLASS_NAME
+            {
+              ...
+              $RETURN_TYPE $FUNCTION_NAME(...)
+              {
+                ...
+                var $REGEX = new Regex(...);
+                ...
+              }
+              ...
+            }    
+        - pattern: |
+            class $CLASS_NAME
+            {
+              ...
+              var $REGEX = new Regex(...);
+              ...
+            } 
+    message: RegEx object initialized in class
+    languages:
+      - csharp
+    severity: INFO

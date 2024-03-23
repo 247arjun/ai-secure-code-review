@@ -1,0 +1,74 @@
+{
+  "$schema": "https://docs.oasis-open.org/sarif/sarif/v2.1.0/os/schemas/sarif-schema-2.1.0.json",
+  "runs": [
+    {
+      "invocations": [
+        {
+          "executionSuccessful": true,
+          "toolExecutionNotifications": []
+        }
+      ],
+      "results": [
+        {
+          "fingerprints": {
+            "matchBasedId/v1": "edf864f39b83900f6680cfcf3d8981c9fa47860cde4842cfca298e1cf5de33c1a9b4ad60e2346686f2af0b7fe8193171bd7110866ea854eb748ea05a7e7018fc_0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "StringExtensions.cs",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "endColumn": 6,
+                  "endLine": 86,
+                  "snippet": {
+                    "text": "    public static class StringExtensions\n    {\n        private static readonly Regex PathAndQueryRegex = new Regex(@\"(?<path>[^\\?]*)(?<query>\\?.*)?\");\n\n        public static string FormatWith(this string s, params object[] args)\n        {\n            return String.Format(s, args);\n        }\n\n        public static void GetPathAndQuery(this string url, out string path, out string query)\n        {\n            // NOTE: Do not lowercase the querystring vals\n            var match = PathAndQueryRegex.Match(url);\n\n            // Just covering my backside here in case the regex fails for some reason.\n            if (!match.Success)\n            {\n                path = url;\n                query = null;\n            }\n            else\n            {\n                path = match.Groups[\"path\"].Value;\n                query = match.Groups[\"query\"].Value;\n            }\n        }\n\n        public static bool HasValue(this string s)\n        {\n            return !String.IsNullOrWhiteSpace(s);\n        }\n\n        public static bool HasNoValue(this string s)\n        {\n            return String.IsNullOrWhiteSpace(s);\n        }\n\n        public static bool IsValidUrl(this string s, bool allowTokens = false)\n        {\n            var urlParts = s.Split(new[] { \"/\" }, StringSplitOptions.RemoveEmptyEntries);\n\n            var invalidUrlPatterns = new List<string>\n            {\n                @\"[#%&:<>/{0}]\".FormatWith(allowTokens ? null : @\"\\\\\\+\\{\\}?\\*\"),\n                @\"\\.\\.\",\n                @\"\\.$\",\n                @\"^ \",\n                @\" $\"\n            };\n\n            var invalidUrlPattern = String.Join(\"|\", invalidUrlPatterns);\n\n            return !urlParts.Any(p => Regex.IsMatch(p, invalidUrlPattern));\n        }\n\n        public static string[] SplitAndTrim(this string s, params string[] separator)\n        {\n            if (!s.HasValue())\n                return null;\n\n            return s.Split(separator, StringSplitOptions.RemoveEmptyEntries).Select(i => i.Trim()).ToArray();\n        }\n\n        public static bool ValueEquals(this string s, string other)\n        {\n            if (s == null)\n                return other == null;\n\n            return s.Equals(other, StringComparison.OrdinalIgnoreCase);\n        }\n\n        public static string ValueOr(this string s, string otherValue)\n        {\n            if (s.HasValue())\n                return s;\n\n            return otherValue;\n        }\n    }"
+                  },
+                  "startColumn": 5,
+                  "startLine": 8
+                }
+              }
+            }
+          ],
+          "message": {
+            "text": "RegEx object initialized in class"
+          },
+          "properties": {},
+          "ruleId": "regex-initialization"
+        }
+      ],
+      "tool": {
+        "driver": {
+          "name": "Semgrep OSS",
+          "rules": [
+            {
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "fullDescription": {
+                "text": "RegEx object initialized in class"
+              },
+              "help": {
+                "markdown": "RegEx object initialized in class",
+                "text": "RegEx object initialized in class"
+              },
+              "id": "regex-initialization",
+              "name": "regex-initialization",
+              "properties": {
+                "precision": "very-high",
+                "tags": []
+              },
+              "shortDescription": {
+                "text": "Semgrep Finding: regex-initialization"
+              }
+            }
+          ],
+          "semanticVersion": "1.66.0"
+        }
+      }
+    }
+  ],
+  "version": "2.1.0"
+}
