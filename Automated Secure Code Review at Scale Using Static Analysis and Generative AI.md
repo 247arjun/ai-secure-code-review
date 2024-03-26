@@ -58,8 +58,8 @@ The Static Analysis Results Interchange Format [(SARIF) is an open standard](htt
 
 [Semgrep Code](https://semgrep.dev/products/semgrep-code/), a powerful static analysis tool, is utilized to scan internal codebases, identifying source code based on predefined rules. By exporting  results from the Semgrep scans into SARIF files, we create a structured, JSON-based dataset of identified code segments that serves as a base for further analysis. 
 
-> [!info] Semgrep vs. other SAST
 > Note that Semgrep Code is not the only tool that can be used here. SARIF being an open standard allows for utilizing [CodeQL](https://codeql.github.com/) and any other SAST tool that returns results in the format.
+
 ### OpenAI LLM Models
 [OpenAI's Large Language Models](https://platform.openai.com/docs/models) (LLMs) represent a significant advancement in the field of natural language processing and generation. These models have been trained on diverse datasets including software source code. LLMs also continue to expand the size of their context window, with the current (March 2024) state of the art GPT-4-Turbo model capable of a 128k token window, allowing for a large amount of text passed in via prompts to the model. A particularly relevant feature of these models for this project is their adeptness at parsing and generating structured data formats, such as Markdown and JSON, which are commonly used in software development and documentation.
 #### Markdown parsing and generation
